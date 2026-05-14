@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pro Success Onboarding — Survey Results</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #181c24;
+    --border: rgba(255,255,255,0.07);
+    --accent: #5DF2C0;
+    --accent2: #FF6B6B;
+    --accent3: #FFD166;
+    --text: #f0f2f7;
+    --muted: #6b7280;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+  .bg-glow {
+    position: fixed;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(93,242,192,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 1;
+  }
+  header {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 56px;
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.1s;
+  }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.2s;
+  }
+  h1 em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+  }
+  .header-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.35s;
+  }
+  .meta-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+  .meta-pill .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: inline-block;
+  }
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  /* KPI */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.45s;
+  }
+  .kpi-card {
+    background: var(--surface);
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .kpi-card:hover { background: var(--surface2); }
+  .kpi-card:first-child { border-radius: 12px 0 0 12px; }
+  .kpi-card:last-child  { border-radius: 0 12px 12px 0; }
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .kpi-card:hover::before { transform: scaleX(1); }
+  .kpi-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .kpi-value { font-family: 'Syne', sans-serif; font-size: 40px; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+  .kpi-sub   { font-size: 11px; color: var(--muted); }
+  /* Completion */
+  .completion-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.5s;
+  }
+  .completion-card {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .completion-card:hover { border-color: rgba(93,242,192,0.25); transform: translateY(-2px); }
+  .completion-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .completion-date { font-size: 11px; color: var(--muted); margin-bottom: 20px; }
+  .completion-bars { display: flex; flex-direction: column; gap: 10px; }
+  .comp-row { display: flex; align-items: center; gap: 10px; font-size: 11px; }
+  .comp-label { color: var(--muted); width: 90px; flex-shrink: 0; }
+  .comp-bar-track { flex: 1; height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+  .comp-bar-fill { height: 100%; border-radius: 2px; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); width: 0; }
+  .comp-pct { color: var(--text); width: 36px; text-align: right; }
+  .completion-badge {
+    position: absolute; top: 20px; right: 20px;
+    font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+  }
+  .badge-green { color: var(--accent); }
+  .badge-yellow { color: var(--accent3); }
+  .fill-green  { background: var(--accent); }
+  .fill-yellow { background: var(--accent3); }
+  /* Ratings */
+  .ratings-section {
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.55s;
+  }
+  .rating-row {
+    display: grid;
+    grid-template-columns: 1fr 160px 60px;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .rating-row:first-child { border-top: 1px solid var(--border); }
+  .rating-row.data-row:hover { background: rgba(255,255,255,0.02); }
+  .rating-question { font-size: 13px; color: var(--text); line-height: 1.5; }
+  .q-num { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 4px; display: block; }
+  .rating-dots { display: flex; gap: 6px; align-items: center; justify-content: flex-end; }
+  .dot-score {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+    border: 1.5px solid transparent;
+    transition: transform 0.2s;
+    cursor: default;
+  }
+  .dot-score:hover { transform: scale(1.2); }
+  .s5 { background: rgba(93,242,192,0.15); color: #5DF2C0; border-color: rgba(93,242,192,0.3); }
+  .s4 { background: rgba(93,242,192,0.07); color: rgba(93,242,192,0.7); border-color: rgba(93,242,192,0.15); }
+  .s3 { background: rgba(255,209,102,0.12); color: #FFD166; border-color: rgba(255,209,102,0.25); }
+  .rating-avg { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; text-align: right; }
+  .avg-h { color: #5DF2C0; }
+  .avg-m { color: rgba(93,242,192,0.7); }
+  .avg-l { color: #FFD166; }
+  /* Insight box */
+  .insight-box {
+    background: linear-gradient(135deg, rgba(93,242,192,0.06), rgba(93,242,192,0.02));
+    border: 1px solid rgba(93,242,192,0.2);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 32px 0 56px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.6s;
+  }
+  .insight-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .insight-text { font-size: 13px; line-height: 1.7; color: rgba(240,242,247,0.85); }
+  .insight-text strong { color: var(--accent); font-weight: 500; }
+  /* Two col */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.65s;
+  }
+  .card { background: var(--surface); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; transition: border-color 0.2s; }
+  .card:hover { border-color: rgba(93,242,192,0.15); }
+  .card-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .card-header h3 { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; }
+  .card-icon { width: 28px; height: 28px; border-radius: 6px; background: rgba(93,242,192,0.1); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+  .card-body { padding: 20px 24px; }
+  /* Contrib bars */
+  .contrib-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .contrib-label { font-size: 11px; color: var(--text); width: 190px; flex-shrink: 0; line-height: 1.3; }
+  .contrib-track { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+  .contrib-fill { height: 100%; border-radius: 3px; width: 0; transition: width 1.4s cubic-bezier(0.4,0,0.2,1); }
+  .c-full { background: var(--accent); }
+  .c-part { background: var(--accent3); }
+  .contrib-count { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--accent); width: 20px; text-align: right; }
+  /* Barriers */
+  .barrier-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px; line-height: 1.5; }
+  .barrier-item:last-child { border-bottom: none; }
+  .barrier-count { width: 20px; height: 20px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+  .bc2 { background: rgba(255,107,107,0.15); color: var(--accent2); }
+  .bc1 { background: rgba(255,209,102,0.12); color: var(--accent3); }
+  /* Quotes */
+  .open-ended-section { margin-bottom: 56px; opacity: 0; animation: fadeUp 0.6s ease forwards 0.7s; }
+  .quote-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .quote-card {
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .quote-card:hover { border-color: rgba(93,242,192,0.2); transform: translateY(-2px); }
+  .quote-card.full { grid-column: 1 / -1; }
+  .quote-card::before {
+    content: '"';
+    position: absolute; top: -10px; right: 16px;
+    font-family: 'Instrument Serif', serif;
+    font-size: 100px; color: rgba(93,242,192,0.06);
+    line-height: 1; pointer-events: none;
+  }
+  .quote-tag { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+  .quote-text { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 15px; line-height: 1.65; color: rgba(240,242,247,0.9); margin-bottom: 14px; }
+  .quote-author { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .quote-author::before { content: ''; width: 16px; height: 1px; background: var(--muted); display: inline-block; }
+  /* Observe AI */
+  .observe-section { margin-bottom: 56px; opacity: 0; animation: fadeUp 0.6s ease forwards 0.72s; }
+  .observe-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .observe-item { background: var(--surface); padding: 24px; display: flex; flex-direction: column; gap: 10px; transition: background 0.2s; }
+  .observe-item:hover { background: var(--surface2); }
+  .observe-item:first-child { border-radius: 12px 0 0 12px; }
+  .observe-item:last-child  { border-radius: 0 12px 12px 0; }
+  .observe-person { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; }
+  .observe-answer { font-size: 12px; line-height: 1.55; color: rgba(240,242,247,0.7); }
+  .observe-tag { display: inline-block; padding: 3px 10px; border-radius: 100px; font-size: 10px; font-weight: 500; letter-spacing: 0.05em; margin-top: auto; }
+  .t-post   { background: rgba(255,209,102,0.12); color: var(--accent3); }
+  .t-unsure { background: rgba(107,114,128,0.2); color: var(--muted); }
+  /* Recs */
+  .recs-section { margin-bottom: 64px; opacity: 0; animation: fadeUp 0.6s ease forwards 0.75s; }
+  .rec-list { display: flex; flex-direction: column; gap: 12px; }
+  .rec-item {
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    align-items: center;
+    gap: 16px;
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 16px 20px;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .rec-item:hover { border-color: rgba(255,255,255,0.12); transform: translateX(4px); }
+  .rec-priority { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .p-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .ph { background: var(--accent2); box-shadow: 0 0 8px rgba(255,107,107,0.5); }
+  .pm { background: var(--accent3); box-shadow: 0 0 8px rgba(255,209,102,0.4); }
+  .pl { background: var(--muted); }
+  .p-lbl { font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+  .rec-area { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .rec-action { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .rec-tag { font-size: 10px; padding: 4px 10px; border-radius: 100px; letter-spacing: 0.05em; white-space: nowrap; flex-shrink: 0; }
+  .tg-ops  { background: rgba(255,107,107,0.1); color: var(--accent2); }
+  .tg-cur  { background: rgba(93,242,192,0.1); color: var(--accent); }
+  .tg-time { background: rgba(255,209,102,0.1); color: var(--accent3); }
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.8s;
+  }
+  .footer-text { font-size: 11px; color: var(--muted); }
+  .footer-badge { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .footer-badge .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; animation: pulseAnim 2s infinite; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulseAnim {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.4; transform: scale(0.8); }
+  }
+  @media (max-width: 768px) {
+    .kpi-strip { grid-template-columns: 1fr 1fr; }
+    .kpi-card:first-child { border-radius: 12px 12px 0 0; }
+    .kpi-card:last-child  { border-radius: 0 0 12px 12px; }
+    .completion-grid, .two-col, .quote-grid { grid-template-columns: 1fr; }
+    .observe-grid { grid-template-columns: 1fr; }
+    .observe-item:first-child { border-radius: 12px 12px 0 0; }
+    .observe-item:last-child  { border-radius: 0 0 12px 12px; }
+    .rec-item { grid-template-columns: 36px 1fr; }
+    .rec-tag  { display: none; }
+    .rating-row { grid-template-columns: 1fr 140px 50px; }
+    footer { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="container">
+
+  <header>
+    <p class="header-eyebrow">Pro Success Onboarding · Cohort Report</p>
+    <h1>Onboarding <em>Survey</em><br>Results</h1>
+    <div class="header-meta">
+      <div class="meta-pill"><span class="dot"></span> April 27–29, 2026</div>
+      <div class="meta-pill"><span class="dot"></span> 3 Respondents</div>
+      <div class="meta-pill"><span class="dot"></span> 9 Rated Questions</div>
+      <div class="meta-pill"><span class="dot"></span> Overall Avg: 3.96 / 5</div>
+    </div>
+  </header>
+
+  <div class="section-label">Key Metrics</div>
+  <div class="kpi-strip">
+    <div class="kpi-card">
+      <div class="kpi-label">Overall Avg Score</div>
+      <div class="kpi-value">3.96</div>
+      <div class="kpi-sub">out of 5.0</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Rating Completion</div>
+      <div class="kpi-value">100%</div>
+      <div class="kpi-sub">all 9 Qs answered by all</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Open-Q Completion</div>
+      <div class="kpi-value">56%</div>
+      <div class="kpi-sub">avg across open-ended</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Readiness Score</div>
+      <div class="kpi-value">4.00</div>
+      <div class="kpi-sub">ready to perform w/ coaching</div>
+    </div>
+  </div>
+
+  <div class="section-label">Respondent Completion</div>
+  <div class="completion-grid">
+    <div class="completion-card">
+      <div class="completion-name">Gaze Cadizal</div>
+      <div class="completion-date">Submitted Apr 29, 2026</div>
+      <div class="completion-badge badge-green">100%</div>
+      <div class="completion-bars">
+        <div class="comp-row">
+          <span class="comp-label">Rating Qs</span>
+          <div class="comp-bar-track"><div class="comp-bar-fill fill-green" data-w="100"></div></div>
+          <span class="comp-pct">9/9</span>
+        </div>
+        <div class="comp-row">
+          <span class="comp-label">Open-Ended</span>
+          <div class="comp-bar-track"><div class="comp-bar-fill fill-green" data-w="100"></div></div>
+          <span class="comp-pct">6/6</span>
+        </div>
+      </div>
+    </div>
+    <div class="completion-card">
+      <div class="completion-name">MJ Dela Cruz</div>
+      <div class="completion-date">Submitted Apr 27, 2026</div>
+      <div class="completion-badge badge-yellow">83%</div>
+      <div class="completion-bars">
+        <div class="comp-row">
+          <span class="comp-label">Rating Qs</span>
+          <div class="comp-bar-track"><div class="comp-bar-fill fill-green" data-w="100"></div></div>
+          <span class="comp-pct">9/9</span>
+        </div>
+        <div class="comp-row">
+          <span class="comp-label">Open-Ended</span>
+          <div class="comp-bar-track"><div class="comp-bar-fill fill-yellow" data-w="50"></div></div>
+          <span class="comp-pct">3/6</span>
+        </div>
+      </div>
+    </div>
+    <div class="completion-card">
+      <div class="completion-name">Laurenze Bryan Rones</div>
+      <div class="completion-date">Submitted Apr 27, 2026</div>
+      <div class="completion-badge badge-yellow">83%</div>
+      <div class="completion-bars">
+        <div class="comp-row">
+          <span class="comp-label">Rating Qs</span>
+          <div class="comp-bar-track"><div class="comp-bar-fill fill-green" data-w="100"></div></div>
+          <span class="comp-pct">9/9</span>
+        </div>
+        <div class="comp-row">
+          <span class="comp-label">Open-Ended</span>
+          <div class="comp-bar-track"><div class="comp-bar-fill fill-yellow" data-w="50"></div></div>
+          <span class="comp-pct">3/6</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Question-by-Question Scores</div>
+  <div class="ratings-section">
+    <div class="rating-row">
+      <div style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)">Question</div>
+      <div style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-align:right">Gaze · MJ · Laurenze</div>
+      <div style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);text-align:right">Avg</div>
+    </div>
+    <div class="rating-row data-row">
+      <div class="rating-question"><span class="q-num">Q1</span>Prepared for most common role tasks</div>
+      <div class="rating-dots">
+        <div class="dot-score s4" title="Gaze: 4">4</div>
+        <div class="dot-score s4" title="MJ: 4">4</div>
+        <div class="dot-score s5" title="Laurenze: 5">5</div>
+      </div>
+      <div class="rating-avg avg-h">4.33</div>
+    </div>
+    <div class="rating-row data-row">
+      <div class="rating-question"><span class="q-num">Q2</span>Confident handling core workflows</div>
+      <div class="rating-dots">
+        <div class="dot-score s4" title="Gaze: 4">4</div>
+        <div class="dot-score s4" title="MJ: 4">4</div>
+        <div class="dot-score s5" title="Laurenze: 5">5</div>
+      </div>
+      <div class="rating-avg avg-h">4.33</div>
+    </div>
+    <div class="rating-row data-row">
+      <div class="rating-question"><span class="q-num">Q3</span>Enough practice before going live ⚠️</div>
+      <div class="rating-dots">
+        <div class="dot-score s4" title="Gaze: 4">4</div>
+        <div class="dot-score s3" title="MJ: 3">3</div>
+        <div class="dot-score s4" title="Laurenze: 4">4</div>
+      </div>
+      <div class="rating-avg avg-l">3.67</div>
+    </div>
+    <div class="rating-row data-row">
+      <div class="rating-question"><span class="q-num">Q4</span>Balance of learning modalities worked</div>
+      <div class="rating-dots">
+        <div class="dot-score s4" title="Gaze: 4">4</div>
+        <div class="dot-score s4" title="MJ: 4">4</div>
+        <div class="dot-score s4" title="Laurenze: 4">4</div>
+      </div>
+      <div class="rating-avg avg-m">4.00</div>
+    </div>
+    <div class="rating-row data-row">
+      <div class="rating-question"><span class="q-num">Q5</span>Know where to find answers</div>
+      <div class="rating-dots">
+        <div class="dot-score s4" title="Gaze: 4">4</div>
+        <div class="dot-score s4" title="MJ: 4">4</div>
+        <div class="dot-score s4" title="Laurenze: 4">4</div>
+      </div>
+      <div class="rating-avg avg-m">4.00</div>
+    </div>
+    <div class="rating-row data-row">
+      <div class="rating-question"><span class="q-num">Q6</span>Understand how to prioritize actions ⚠️</div>
+      <div class="rating-dots">
+        <div class="dot-score s4" title="Gaze: 4">4</div>
+        <div class="dot-score s3" title="MJ: 3">3</div>
+        <div class="dot-score s4" title="Laurenze: 4">4</div>
+      </div>
+      <div class="rating-avg avg-l">3.67</div>
+    </div>
+    <div class="rating-row data-row">
+      <div class="rating-question"><span class="q-num">Q7</span>Pacing felt manageable</div>
+      <div class="rating-dots">
+        <div class="dot-score s4" title="Gaze: 4">4</div>
+        <div class="dot-score s4" title="MJ: 4">4</div>
+        <div class="dot-score s4" title="Laurenze: 4">4</div>
+      </div>
+      <div class="rating-avg avg-m">4.00</div>
+    </div>
+    <div class="rating-row data-row">
+      <div class="rating-question"><span class="q-num">Q8</span>Content was relevant to the actual job ⚠️</div>
+      <div class="rating-dots">
+        <div class="dot-score s4" title="Gaze: 4">4</div>
+        <div class="dot-score s3" title="MJ: 3">3</div>
+        <div class="dot-score s4" title="Laurenze: 4">4</div>
+      </div>
+      <div class="rating-avg avg-l">3.67</div>
+    </div>
+    <div class="rating-row data-row">
+      <div class="rating-question"><span class="q-num">Q9</span>Readiness to perform with coaching</div>
+      <div class="rating-dots">
+        <div class="dot-score s4" title="Gaze: 4">4</div>
+        <div class="dot-score s4" title="MJ: 4">4</div>
+        <div class="dot-score s4" title="Laurenze: 4">4</div>
+      </div>
+      <div class="rating-avg avg-m">4.00</div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    <div class="insight-icon">💡</div>
+    <div class="insight-text">
+      <strong>Three questions tied at 3.67</strong> — the lowest-scoring cluster: practice opportunities (Q3), prioritization clarity (Q6), and content relevance (Q8). These are interconnected — when content feels less role-specific, it's harder to contextualize prioritization, and practice feels less meaningful. <strong>Addressing content relevance first is likely to lift all three.</strong>
+    </div>
+  </div>
+
+  <div class="section-label">What Worked · What Blocked</div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🏆</div>
+        <h3>Top Confidence Contributors</h3>
+      </div>
+      <div class="card-body">
+        <div class="contrib-row">
+          <span class="contrib-label">Shadowing</span>
+          <div class="contrib-track"><div class="contrib-fill c-full" data-w="100"></div></div>
+          <span class="contrib-count">3</span>
+        </div>
+        <div class="contrib-row">
+          <span class="contrib-label">Reverse shadowing / live practice</span>
+          <div class="contrib-track"><div class="contrib-fill c-full" data-w="100"></div></div>
+          <span class="contrib-count">3</span>
+        </div>
+        <div class="contrib-row">
+          <span class="contrib-label">Scenarios / simulations</span>
+          <div class="contrib-track"><div class="contrib-fill c-part" data-w="66"></div></div>
+          <span class="contrib-count">2</span>
+        </div>
+        <div class="contrib-row">
+          <span class="contrib-label">Live instruction</span>
+          <div class="contrib-track"><div class="contrib-fill c-part" data-w="33"></div></div>
+          <span class="contrib-count">1</span>
+        </div>
+        <div class="contrib-row">
+          <span class="contrib-label">Feedback from manager</span>
+          <div class="contrib-track"><div class="contrib-fill c-part" data-w="33"></div></div>
+          <span class="contrib-count">1</span>
+        </div>
+        <div class="contrib-row">
+          <span class="contrib-label">eLearning / self-paced modules</span>
+          <div class="contrib-track"><div class="contrib-fill c-part" data-w="33"></div></div>
+          <span class="contrib-count">1</span>
+        </div>
+        <div class="contrib-row">
+          <span class="contrib-label">Tool demos</span>
+          <div class="contrib-track"><div class="contrib-fill c-part" data-w="33"></div></div>
+          <span class="contrib-count">1</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🚧</div>
+        <h3>Barriers to Learning</h3>
+      </div>
+      <div class="card-body">
+        <div class="barrier-item">
+          <div class="barrier-count bc2">2</div>
+          <div>
+            <div style="font-size:12px;font-weight:500;margin-bottom:2px;color:var(--text)">Access issues to tools</div>
+            <div style="font-size:11px;color:var(--muted)">MJ &amp; Laurenze both flagged this. Provisioning before Day 1 resolves it entirely.</div>
+          </div>
+        </div>
+        <div class="barrier-item">
+          <div class="barrier-count bc1">1</div>
+          <div>
+            <div style="font-size:12px;font-weight:500;margin-bottom:2px;color:var(--text)">Not enough practice time</div>
+            <div style="font-size:11px;color:var(--muted)">Gaze only. Directly aligns with Q3 being the lowest-rated item.</div>
+          </div>
+        </div>
+        <div class="barrier-item">
+          <div class="barrier-count bc1">1</div>
+          <div>
+            <div style="font-size:12px;font-weight:500;margin-bottom:2px;color:var(--text)">Live session logistics / tech issues</div>
+            <div style="font-size:11px;color:var(--muted)">Gaze only. Pre-session tech checks would mitigate this.</div>
+          </div>
+        </div>
+        <div class="barrier-item">
+          <div class="barrier-count bc1">1</div>
+          <div>
+            <div style="font-size:12px;font-weight:500;margin-bottom:2px;color:var(--text)">Instructions or expectations unclear</div>
+            <div style="font-size:11px;color:var(--muted)">MJ only. Clearer daily activity briefs would help.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Open-Ended Feedback</div>
+  <div class="open-ended-section">
+    <div class="quote-grid">
+      <div class="quote-card full">
+        <div class="quote-tag">What should be improved first</div>
+        <div class="quote-text">Shadowing should be done every day during the beginning of Week 1. Reverse shadowing should have been started on the 2nd and 3rd week.</div>
+        <div class="quote-author">Gaze Cadizal</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-tag">What should stay the same</div>
+        <div class="quote-text">The live sessions — albeit some materials are not related to Pro Success, the format itself is valuable.</div>
+        <div class="quote-author">Gaze Cadizal</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-tag">Still needs support on</div>
+        <div class="quote-text">Tool navigation (FD) and cross-department collaboration. Shadowing sessions sometimes lack live calls, and recorded calls don't show the rep's screen.</div>
+        <div class="quote-author">Gaze Cadizal</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Observe.AI Essentials — Timing Preference</div>
+  <div class="observe-section">
+    <div class="observe-grid">
+      <div class="observe-item">
+        <div class="observe-person">Gaze Cadizal</div>
+        <div class="observe-answer">Not sure yet — hasn't formed a strong timing preference after completing training.</div>
+        <span class="observe-tag t-unsure">Undecided</span>
+      </div>
+      <div class="observe-item">
+        <div class="observe-person">MJ Dela Cruz</div>
+        <div class="observe-answer">After onboarding, once doing the role more independently — wants role context before the training lands.</div>
+        <span class="observe-tag t-post">Post-Onboarding</span>
+      </div>
+      <div class="observe-item">
+        <div class="observe-person">Laurenze Bryan Rones</div>
+        <div class="observe-answer">After onboarding, once doing the role more independently — consistent with MJ's view.</div>
+        <span class="observe-tag t-post">Post-Onboarding</span>
+      </div>
+    </div>
+    <div style="margin-top:12px;font-size:11px;color:var(--muted);line-height:1.6;padding:0 4px">
+      💡 2 of 3 respondents prefer Observe.AI training after onboarding. Consider shifting to Weeks 5–6 as a role-reinforcement tool rather than embedding it in early onboarding.
+    </div>
+  </div>
+
+  <div class="section-label">Recommendations for Next Cohort</div>
+  <div class="recs-section">
+    <div class="rec-list">
+      <div class="rec-item">
+        <div class="rec-priority"><div class="p-dot ph"></div><div class="p-lbl">High</div></div>
+        <div>
+          <div class="rec-area">Pre-provision all tools before Day 1</div>
+          <div class="rec-action">2 of 3 learners hit access blockers. Resolve tool provisioning before cohort starts.</div>
+        </div>
+        <span class="rec-tag tg-ops">Operations</span>
+      </div>
+      <div class="rec-item">
+        <div class="rec-priority"><div class="p-dot ph"></div><div class="p-lbl">High</div></div>
+        <div>
+          <div class="rec-area">Resequence shadowing: daily in Week 1, reverse shadowing Weeks 2–3</div>
+          <div class="rec-action">Unanimously the #1 confidence builder. Front-loading it amplifies impact significantly.</div>
+        </div>
+        <span class="rec-tag tg-cur">Curriculum</span>
+      </div>
+      <div class="rec-item">
+        <div class="rec-priority"><div class="p-dot pm"></div><div class="p-lbl">Med</div></div>
+        <div>
+          <div class="rec-area">Audit live session materials for Pro Success relevance</div>
+          <div class="rec-action">Learners appreciate the format but flagged off-topic content. Curation lifts Q8.</div>
+        </div>
+        <span class="rec-tag tg-cur">Curriculum</span>
+      </div>
+      <div class="rec-item">
+        <div class="rec-priority"><div class="p-dot pm"></div><div class="p-lbl">Med</div></div>
+        <div>
+          <div class="rec-area">Add structured practice reps, especially for task prioritization</div>
+          <div class="rec-action">Q3 and Q6 both scored lowest. Deliberate practice exercises address both simultaneously.</div>
+        </div>
+        <span class="rec-tag tg-cur">Curriculum</span>
+      </div>
+      <div class="rec-item">
+        <div class="rec-priority"><div class="p-dot pl"></div><div class="p-lbl">Low</div></div>
+        <div>
+          <div class="rec-area">Move Observe.AI Essentials to Weeks 5–6</div>
+          <div class="rec-action">2 of 3 prefer post-onboarding. Use it as reinforcement once they're active in the role.</div>
+        </div>
+        <span class="rec-tag tg-time">Timing</span>
+      </div>
+      <div class="rec-item">
+        <div class="rec-priority"><div class="p-dot pl"></div><div class="p-lbl">Low</div></div>
+        <div>
+          <div class="rec-area">Shorten or reorder open-ended survey questions</div>
+          <div class="rec-action">67% drop-off on the final 3 questions. Move them earlier or reduce to 2 to improve completion.</div>
+        </div>
+        <span class="rec-tag tg-ops">Survey Design</span>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-text">Pro Success Onboarding · April 2026 Cohort · n=3</div>
+    <div class="footer-badge"><span class="pulse"></span> Survey Dashboard · Generated May 2026</div>
+  </footer>
+
+</div>
+<script>
+  function animateBars() {
+    document.querySelectorAll('[data-w]').forEach((el, i) => {
+      setTimeout(() => { el.style.width = el.dataset.w + '%'; }, 300 + i * 50);
+    });
+  }
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { animateBars(); obs.disconnect(); } });
+  }, { threshold: 0.1 });
+  const target = document.querySelector('.completion-grid');
+  if (target) obs.observe(target);
+  window.addEventListener('load', () => setTimeout(animateBars, 500));
+</script>
+</body>
+</html>
